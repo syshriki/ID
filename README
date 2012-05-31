@@ -1,0 +1,8 @@
+Run the unit tests to see that the code works.
+Write code in Vendor.pm until the final two unit tests pass
+
+To run all of the unit tests, run 'make'
+
+To run just one unit test, in the case, run 'make TEST=<path to test.t> test'
+
+
