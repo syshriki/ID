@@ -18,7 +18,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 8;
+use Test::More tests => 10;
 
 use ID::Hardware::Vendor;
 
@@ -49,4 +49,9 @@ is ( $vendor->getSupportURL(), undef, "getSupportURL should return undef until a
 $vendor->setSupportURL ( $vendorSupportURL );
 is ( $vendor->getSupportURL(), $vendorSupportURL, "test SupportURL accessor methods" );
 
+#Test ParserClass accessor methods
+my $parserClass = "ABB";
+is ( $vendor->getParserClass(), undef, "getParserClass should return undef until a parserClass is set" );
+$vendor->setParserClass ( $parserClass );
+is ( $vendor->getParserClass(), $parserClass, "test ParserClass accessor methods" );
 

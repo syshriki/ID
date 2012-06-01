@@ -79,4 +79,15 @@ sub setSupportURL {
 	my ( $supportURL ) = @_;
 	$self->{supportURL} = $supportURL;
 }
+
+sub setParserClass{
+	my $self = shift;
+	my ( $parserClass ) = @_;
+	$self->{parserClass} = $parserClass;
+}
+
+sub getParserClass{
+	my $self = shift;
+	return $self->{parserClass};
+}
 1;
