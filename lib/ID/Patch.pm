@@ -108,12 +108,12 @@ sub getAffected {
 
 sub setReferences {
     my $self = shift;
-    my ( $references ) = @_; 
-    $self->{REFERENCES} = $references;
+    my ( @references ) = @_; 
+    @{$self->{REFERENCES}} = @references;
 }
 
 sub getReferences {
     my $self = shift;
-    return $self->{REFERENCES};
+    return @{$self->{REFERENCES}};
 }
 1;

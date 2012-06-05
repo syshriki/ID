@@ -20,6 +20,7 @@ is (new ID::PatchParser(), undef, "negative test contructor");
 #Should return undef right now
 is ($patch_parser->Parse(), undef, "Parse has no function right now");
 
+is ($patch_parser->getPatch(), undef, "getPatch has no function right now");
 
 
 

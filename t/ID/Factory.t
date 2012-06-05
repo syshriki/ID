@@ -58,10 +58,13 @@ is ($testVendor->getURL(),$url,"Checks vendor URL");
 is ($testVendor->getSupportURL(),$surl,"Checks vendor support URL");
 is ($testVendor->getParserClass(),$cparser,"Checks vendor class parser");
 
-my @built = $factory->buildVendorList();
- 
+$factory->buildVendorList();
+is ($factory->getVendorList(),undef,"Factory vendor list should be undef before buildVendorList is called");
+my @built = $factory->getVendorList();
+
+
 #There should be three objects in @built
-is(scalar @built,3, "Checks buildVendorList count");
+is(scalar @built,3, "Checks getVendorList to make sure it grabs the objects");
 
 #Checks the names of each vendor to make sure they are correct
 is ($built[0]->getName(),$parsed1[0],"Checks name of vendor 1");

@@ -9,9 +9,9 @@ use ID::Hardware::Vendor;
 sub new {
     my ( $invocant ) = shift;
     my ( $class ) = ref ( $invocant ) || $invocant;
-    my ( $self ) = {
-        @_,
-        };
+    my ( $self ) = {@_};
+    $self->{vendor_list} = ();
+    
     bless ( $self, $class );
 
     if ( ! defined $self->getFileName() ) {
@@ -21,19 +21,25 @@ sub new {
     return $self;
 }
 
+#Accessor method for the vendor list
+sub getVendorList{
+        my $self = shift;
+        return @{$self->{vendor_list}};
+}
+
 #Builds the list of Vendor objects from the CSV file
 #Arguments: None
 #Returns: List of Vendors
 sub buildVendorList{
-	my $self = shift;
+        my $self = shift;
         my @vendor_list = ();
         my @args = ();
-        my @file_content = $self->getFileContent();
+        my @file_content = $self->getFileContent($self->getFileName());
         foreach my $line(@file_content){
                 @args = $self->parseCSVLine($line);
                 push(@vendor_list,$self->createVendor($args[0],$args[1],$args[2],$args[3]));
         }
-        return @vendor_list;
+        @{$self->{vendor_list}} = @vendor_list;
 }
 
 #Gets the name of the csv file
@@ -46,11 +52,11 @@ sub getFileName{
 }
 
 #Reads the contents of a file into an array line by line
-#Arguments: Filename
+#Arguments: None
 #Returns: File content in array
 sub getFileContent{
-	my $self = shift;
-        my $configFile = $self->{filename};
+        my $self = shift;
+        my $configFile = shift;
         my @file_content = ();
         open my $FH, "<", "$configFile" or die $!;
         while(my $fetchline = <$FH>){
@@ -64,11 +70,11 @@ sub getFileContent{
 #Arguments: Line of text as scalar to be parsed
 #Returns: Parsed data in array 
 sub parseCSVLine{
-	my $self = shift;
-	my $input_string = shift;
+        my $self = shift;
+        my $input_string = shift;
         my @arg_list = ();
         my $csv = Text::CSV_XS->new ({ keep_meta_info => 1, binary => 1 });
-       
+
         if ($csv->parse($input_string)){
                 my @columns = $csv->fields();
                 foreach my $arg(@columns){
@@ -80,21 +86,19 @@ sub parseCSVLine{
         }
         return @arg_list;
 }
-
 #Takes in vendor information and uses it to create a Vendor object
-#Arguments: Vendor name, Vendor URL, Support URL all scalars
+#Arguments: Vendor name, Vendor URL, Support URL, Parser Class all scalars
 #Returns: Vendor object
 sub createVendor{
-	my $self = shift;
+        my $self = shift;
         my $vendor_name = shift;
         my $url = shift;
- 	my $supportURL = shift;
-	my $cparse = shift;
+        my $supportURL = shift;
+        my $cparse = shift;
         my $vendor = new ID::Hardware::Vendor(Name => $vendor_name);
         $vendor->setURL($url);
         $vendor->setSupportURL($supportURL);
-	$vendor->setParserClass($cparse);
+        $vendor->setParserClass($cparse);
         return $vendor;
 }
 1;
-

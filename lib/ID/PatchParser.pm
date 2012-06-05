@@ -1,4 +1,5 @@
 package ID::PatchParser;
+package ID::Patch;
 use strict;
 use warnings;
 
@@ -28,4 +29,7 @@ sub Parse{
 	return undef
 }
 
+sub getPatch{
+	return undef;	
+}
 1;
