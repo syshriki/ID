@@ -21,7 +21,7 @@ sub new {
 
 sub setDate{
 	my $self = shift;
-	my ( $date ) = @_; 
+	my $date = $self->checkUndef(shift); 
 	$self->{DATE} = $date;
 	
 }
@@ -31,7 +31,7 @@ sub getDate{
 }
 sub setID {
     my $self = shift;
-    my ( $ID ) = @_;
+    my $ID = $self->checkUndef(shift);
     $self->{ID} = $ID;
 }
 
@@ -42,7 +42,7 @@ sub getID {
 
 sub setType{
 	my $self = shift;
-	my ( $type ) = @_;
+	my $type = $self->checkUndef(shift);
 	$self->{TYPE} = $type;
 }
 
@@ -53,7 +53,7 @@ sub getType{
 
 sub setDescription {
     my $self = shift;
-    my ( $description ) = @_;
+    my $description = $self->checkUndef(shift);
     $self->{DESCRIPTION} = $description;
 }
 
@@ -64,7 +64,7 @@ sub getDescription {
 
 sub setSeverity {
     my $self = shift;
-    my ( $severity ) = @_; 
+    my $severity = $self->checkUndef(shift); 
     $self->{SEVERITY} = $severity;
 }
 
@@ -75,7 +75,7 @@ sub getSeverity {
 
 sub setImpact {
     my $self = shift;
-    my ( $impact ) = @_;
+    my $impact = $self->checkUndef(shift);
     $self->{IMPACT} = $impact;
 }
 
@@ -86,7 +86,7 @@ sub getImpact {
 
 sub setTitle {
     my $self = shift;
-    my ( $title ) = @_; 
+    my $title = $self->checkUndef(shift); 
     $self->{TITLE} = $title;
 }
 
@@ -97,7 +97,7 @@ sub getTitle {
 
 sub setAffected {
     my $self = shift;
-    my ( $affected ) = @_;
+    my $affected = $self->checkUndef(shift);
     $self->{AFFECTED} = $affected;
 }
 
@@ -114,6 +114,17 @@ sub setReferences {
 
 sub getReferences {
     my $self = shift;
-    return @{$self->{REFERENCES}};
+    return $self->{REFERENCES};
+}
+#Checks for undefs and changes the undefs to N/A's to avoid errors when assigning patch items to the value undef
+#Arguments: Takes a scalar
+#Returns: "Return "N/A" if undef or argument if it's ok
+sub checkUndef{
+	my $self = shift;
+	my $arg = shift;
+	if(! defined $arg){
+		return "N/A";
+	}
+	return $arg;
 }
 1;
