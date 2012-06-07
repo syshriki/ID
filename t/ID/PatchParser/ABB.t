@@ -6,9 +6,9 @@ use ID::PatchParser::ABB;
 
 can_ok("ID::PatchParser::ABB","new");
 
-my $unparsed = "THIS IS UNPARSED DATA";
+my $unparsed_data = "datafile.ini";
 
-my $abb_patch_parser = new ID::PatchParser::ABB(UNPARSED => $unparsed);
+my $abb_patch_parser = new ID::PatchParser::ABB(FILENAME  => "datafile.ini");
 isa_ok ($abb_patch_parser, "ID::PatchParser::ABB" , "make sure we get object from the contructor");
 
 #There must be a scalar in contructor to pass this test

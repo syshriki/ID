@@ -1,25 +1,8 @@
-package Windows;
+package ID::PatchParser::Windows;
 use strict;
 use warnings;
 use Text::CSV_XS;
-use ID::Patch;
-
-#Contructor
-#Notes: Requires a csv file name as input 
-sub new {
-    my ( $invocant ) = shift;
-    my ( $class ) = ref ( $invocant ) || $invocant;
-    my ( $self ) = {@_};
-    $self->{patch_list} = ();
-    
-    bless ( $self, $class );
-
-    if ( ! defined $self->getFileName() ) {
-                 return;
-    }
-
-    return $self;
-}
+use base 'ID::PatchParser';
 
 #Accessor method for the patch list
 sub getPatchList{
@@ -34,30 +17,21 @@ sub buildPatchList{
         my $self = shift;
         my @patch_list = ();
         my @args = ();
-        my @file_content = $self->getFileContent($self->getFileName());
+        my @file_content = $self->getFileContent($self->getFilename());
 		my $i = undef;
 		my $params = "";
         foreach my $line(@file_content){
         	$params = "";
-            @args = $self->parseCSVLine($line);
-			$i = 0;
-			for(@args){
-				$params = $params."\$args[$i],"; #This lets us pass X amount of arguments in createPatch()
-				$i++;
-			}
+        	@args = $self->parseCSVLine($line);
+		$i = 0;
+		for(@args){
+			$params = $params."\$args[$i],"; #This lets us pass X amount of arguments in createPatch()
+			$i++;
+		}
 		chop $params;
                 push(@patch_list,$self->createPatch(eval("$params"))); 
         }
         @{$self->{patch_list}} = @patch_list;
-}
-
-#Gets the name of the csv file
-#Arguments: None
-#Returns: csv filename
-sub getFileName{
-        my $self = shift;
-        my $fn = $self->{filename};
-        return  $fn;
 }
 
 #Reads the contents of a file into an array line by line
@@ -100,36 +74,35 @@ sub parseCSVLine{
 #Returns: Vendor object
 sub createPatch{
         my $self = shift;
-		my $date = shift;
-		my $ID = shift;
-		my $bulletin_kb = shift;
-		my $severity = shift;
-		my $impact = shift;
-		my $title = shift;
-		my $affected_pro = shift;
-		my $component_kb = shift;
-		my $affected_com = shift;
-		my $impact2 = shift;
-		my $severity2 = shift;
-		my $suspended = shift;
-		my $supercedes = shift;
-		my $reboot = shift;
-		my $cve = shift;
-		my $type = "security";
+	my $date = shift;
+	my $ID = shift;
+	my $bulletin_kb = shift;
+	my $severity = shift;
+	my $impact = shift;
+	my $title = shift;
+	my $affected_pro = shift;
+	my $component_kb = shift;
+	my $affected_com = shift;
+	my $impact2 = shift;
+	my $severity2 = shift;
+	my $suspended = shift;
+	my $supercedes = shift;
+	my $reboot = shift;
+	my $cve = shift;
+	my $type = "security";	
+	
+	my $description = "$severity "." $title for $affected_pro";
+	my @references = ("$ID","$bulletin_kb","$component_kb","$cve");
 		
-		my $description = "$severity "." $title for $affected_pro";
-		my @references = ("$ID","$bulletin_kb","$component_kb","$cve");
-		
-		my $patch = new ID::Patch(ID => $ID);
-		$patch->setDate($date);
-		$patch->setSeverity($severity);
-		$patch->setTitle($title);
-		$patch->setType($type);
-		$patch->setImpact($impact);
-		$patch->setAffected($affected_pro);
-		$patch->setDescription($description);
-		$patch->setReferences(@references);
-		
-		return $patch;
+	my $patch = new ID::Patch(ID => $ID);
+	$patch->setDate($date);
+	$patch->setSeverity($severity);
+	$patch->setTitle($title);
+	$patch->setType($type);
+	$patch->setImpact($impact);
+	$patch->setAffected($affected_pro);
+	$patch->setDescription($description);
+	$patch->setReferences(@references);	
+	return $patch;
 }
 1;

@@ -27,7 +27,7 @@ sub setDate{
 }
 sub getDate{
 	my $self = shift;
-	return $self->{DATE};	
+	return ($self->{DATE});	
 }
 sub setID {
     my $self = shift;
@@ -37,7 +37,7 @@ sub setID {
 
 sub getID {
     my $self = shift;
-    return $self->{ID};
+    return ($self->{ID});
 }
 
 sub setType{
@@ -48,7 +48,7 @@ sub setType{
 
 sub getType{
 	my $self = shift;
-	return $self->{TYPE};
+	return ($self->{TYPE});
 }
 
 sub setDescription {
@@ -59,7 +59,7 @@ sub setDescription {
 
 sub getDescription {
     my $self = shift;
-    return $self->{DESCRIPTION};
+    return ($self->{DESCRIPTION});
 }
 
 sub setSeverity {
@@ -70,7 +70,7 @@ sub setSeverity {
 
 sub getSeverity {
     my $self = shift;
-    return $self->{SEVERITY};
+    return ($self->{SEVERITY});
 }
 
 sub setImpact {
@@ -81,7 +81,7 @@ sub setImpact {
 
 sub getImpact {
     my $self = shift;
-    return $self->{IMPACT};
+    return ($self->{IMPACT});
 }
 
 sub setTitle {
@@ -92,7 +92,7 @@ sub setTitle {
 
 sub getTitle {
     my $self = shift;
-    return $self->{TITLE};
+    return ($self->{TITLE});
 }
 
 sub setAffected {
@@ -103,7 +103,7 @@ sub setAffected {
 
 sub getAffected {
     my $self = shift;
-    return $self->{AFFECTED};
+    return ($self->{AFFECTED});
 }
 
 sub setReferences {
@@ -114,8 +114,9 @@ sub setReferences {
 
 sub getReferences {
     my $self = shift;
-    return $self->{REFERENCES};
+    return ($self->{REFERENCES});
 }
+
 #Checks for undefs and changes the undefs to N/A's to avoid errors when assigning patch items to the value undef
 #Arguments: Takes a scalar
 #Returns: "Return "N/A" if undef or argument if it's ok

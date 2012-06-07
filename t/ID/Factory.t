@@ -1,7 +1,8 @@
 use strict;
 use warnings;
 use Data::Dump qw(dump);
-use Test::More tests => 23;
+use Test::More tests => 24;
+use File::Spec::Functions qw(rel2abs);
 
 use ID::Factory;
  
@@ -35,16 +36,16 @@ can_ok("ID::Factory","new");
 ########################################################
 
 
-my $factory = new ID::Factory(filename => 'test.csv');
+my $factory = new ID::Factory(filename => 't/testFiles/testFactory.csv');
 isa_ok ($factory, "ID::Factory" , "make sure we get object from the contructor");
 
-is ($factory->getFileName(), "test.csv", "Test getFileName acessor method");
-
+is ($factory->getFileName(), "t/testFiles/testFactory.csv", "Test getFileName acessor method");
+my $path = 't/testFiles/testFactory.csv';
 #There must be a filename in contructor to pass this test
 is (new ID::Factory(), undef, "negative test contructor");
 
 #Checks to see if the file content is correct
-is ($factory->getFileContent(),@fileContent,"checks content equality");
+is ($factory->getFileContent($path),@fileContent,"checks content equality");
 
 #Checks to see if the parser has the correct output
 is ($factory->parseCSVLine($fileContent[0]),@parsed1, "Checks parser");
@@ -58,8 +59,9 @@ is ($testVendor->getURL(),$url,"Checks vendor URL");
 is ($testVendor->getSupportURL(),$surl,"Checks vendor support URL");
 is ($testVendor->getParserClass(),$cparser,"Checks vendor class parser");
 
+is ($factory->getVendorList(),0,"Factory vendor list should be undef before buildVendorList is called");
+
 $factory->buildVendorList();
-is ($factory->getVendorList(),undef,"Factory vendor list should be undef before buildVendorList is called");
 my @built = $factory->getVendorList();
 
 

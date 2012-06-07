@@ -1,5 +1,4 @@
 package ID::PatchParser;
-package ID::Patch;
 use strict;
 use warnings;
 
@@ -11,11 +10,17 @@ sub new {
         };
     bless ( $self, $class );
 
-    if ( ! defined $self->getUnparsed()) {
-                 return;
+    if(! defined $self->getFilename()){
+	return;
     }
 
     return $self;
+}
+
+sub getFilename{
+	my $self = shift;
+	my $filename = $self->{FILENAME};
+	return $filename;
 }
 
 sub getUnparsed{
@@ -24,12 +29,15 @@ sub getUnparsed{
 	return $unparsed;
 }
 
+sub setUnparsed{
+	my $self = shift;
+	my $unparsed = shift;
+	$self->{UNPARSED} = $unparsed;
+}
+
 sub Parse{
 
 	return undef
 }
 
-sub getPatch{
-	return undef;	
-}
 1;

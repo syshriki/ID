@@ -3,14 +3,13 @@ use strict;
 use warnings;
 use Text::CSV_XS;
 use ID::Hardware::Vendor;
-
 #Contructor
 #Notes: Requires a csv file name as input 
 sub new {
     my ( $invocant ) = shift;
     my ( $class ) = ref ( $invocant ) || $invocant;
     my ( $self ) = {@_};
-    $self->{vendor_list} = ();
+    $self->{vendor_list} = [];
     
     bless ( $self, $class );
 

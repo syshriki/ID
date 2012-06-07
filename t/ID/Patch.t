@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use ID::Patch;
-use Test::More tests => 21;
+use Test::More tests => 20;
 
 
 can_ok ( "ID::Patch","new" );
@@ -19,10 +19,7 @@ is ( $patch->getDate(), undef, "Test that getDate() returns undef until date is 
 $patch->setDate($date);
 is ( $patch->getDate(), $date, "Test that getDate() and setDate() work" );
 
-$patch->setID(undef);
-is ( $patch->getID(), undef, "Tests getID() returns undef until ID is set.");
-$patch->setID($ID);
-is ( $patch->getID(), $ID, "Tests getID() and setID() work" );
+is ( $patch->getID(), $ID, "Tests getID()" );
 
 my $type = "Security";
 is ( $patch->getType(), undef, "Test that getType() returns undef until type is set." );
@@ -54,7 +51,8 @@ is ( $patch->getAffected(), undef, "Test that getAffected() returns undef until 
 $patch->setAffected($affected);
 is ( $patch->getAffected(), $affected, "Test that getAffected() and setAffected() work." );
  
-my $references = "source";
+my @references = qw(source1 source 2);
 is ( $patch->getReferences(), undef, "test that getReferences() returns undef until references is set." );
-$patch->setReferences($references);
-is ( $patch->getReferences(), $references, "Test that getReferences() and setReferences() work." ); 
+$patch->setReferences(@references);
+my @refs = @{$patch->getReferences()};
+is (@refs, @references, "Test that getReferences() and setReferences() work." ); 
