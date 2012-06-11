@@ -15,6 +15,10 @@ sub new {
     return $self;
 }
 
+#Description: Adds delimiters between elements in 2D array inorder to make them easier to eval and send as arguments
+#Example: { arg1 arg2 arg3 } becomes {'arg1,' 'arg2,' 'arg3'} and can be pased to a subroutine sub parse(eval(@arr)); 
+#Arguments: 2D array
+#Returns 2D array with delimiters added to each element
 sub addDelimiters{
 	my $self = shift;
 	my $curr_array = shift;
@@ -31,6 +35,10 @@ sub addDelimiters{
 	}
 	return @new_array;
 }
+
+#Description:Determines the correct parser based on the filetype of the given file
+#Arguments: Filename
+#Returns: parsed data in 2D array
 sub parsePatchFile{
 	my $self = shift;
 	my $fn = shift;
@@ -48,6 +56,9 @@ sub parsePatchFile{
 	return @data;
 }
 
+#Description: Parses csv files
+#Arguments: csv filename
+#Returns: file contents in 2D array 
 sub parseCSVFile{
 	my $self = shift;
   	my $configFile = shift;
@@ -73,6 +84,9 @@ sub parseCSVFile{
 	return @parsed_csv_data;
 }
 
+#Description: Downloads HTML content from given webpage, parses the HTML tables
+#Arguments: URL and headers of desired table to parse
+#Returns: Table data in 2D array
 sub parseHTMLTable{
 	my $self = shift;
 	my $url = shift;
@@ -104,34 +118,39 @@ sub parseHTMLTable{
     return @table_args;
 }
 
+#Description: Parse XLS files
+#Arguments: Filename
+#Returns XLS contents in 2D array
 sub parseXLSFile {
     my $self = shift;
-    my $fn = shift;
+    my $fn = $self->getFilename();
     my @parsedData;
     my $xls = Spreadsheet::ParseExcel->new;
     my $workbook = $xls->parse($fn);
     if ( !defined $workbook ) {
-	 die $xls->error(), ".\n";
+        die $xls->error(), ".\n";
     }
     for my $worksheet ( $workbook->worksheets() ) {
         my ( $row_min, $row_max ) = $worksheet->row_range();
         my ( $col_min, $col_max ) = $worksheet->col_range();
-        for my $row ( $row_min..$row_max ) {
-    		my @temp = ();
-        	for my $col ( $col_min..$col_max ) {
-                	my $cell = $worksheet->get_cell( $row, $col );
-                	my $cellContents = $cell->value;
-  			$cellContents =~ s/^\s+//; #Remove leading whitespace
-          		$cellContents =~ s/\s+$//; #Remove
-                	$cellContents =~ s/\s+$//; #Remove trailing whitespace
-                	push ( @temp, $cellContents );
-            	}
-     		push ( @parsedData, [@temp] ); #Push parsed row array into data array
+        for my $row ( ($row_min+1)..$row_max ) {
+            my @temp = ();
+            for my $col ( $col_min..$col_max ) {
+                my $cell = $worksheet->get_cell( $row, $col );
+                    next unless $cell;
+                my $cellContents = $cell->value();
+                $cellContents =~ s/^\s+//; #Remove leading whitespace
+                $cellContents =~ s/\s+$//; #Remove trailing whitespace
+                push ( @temp, $cellContents );
+            }
+            push ( @parsedData, \@temp ); #Push parsed row array into data array
         }
     }
     return @parsedData;
 }
-
+#Description: Downloads files from the web
+#Arguments: Filename and URL
+#Returns: Filename if file is successfully downloaded
 sub getWebFile{
     my $self = shift;
     my ( $fn,$URL ) = @_;
