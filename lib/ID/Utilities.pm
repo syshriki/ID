@@ -29,9 +29,6 @@ sub parsePatchFile{
 		return "No parser found to parse $ext files.\n";
 	}
 	my @data = eval'$self->'.'$parser_sub'.'($fn)';
-	if($delimit){					#Auto delimit
-		@data = addDelimiters(@data);
-	}
 	return @data;
 }
 
