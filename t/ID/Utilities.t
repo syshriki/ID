@@ -46,15 +46,6 @@ my @htmlparse_content = $utils->parseHTMLTable("http://rhn.redhat.com/errata/rhe
 is ($htmlparse_content[-1][-1],"2010-11-10","Test that parsePatchFile() method chooses correct parse sub and returns parsed data.");
 
 ###############################################################################
-# Test: Check addDelimiters() method
-###############################################################################
-
-@htmlparse_content = $utils->addDelimiters(\@htmlparse_content);
-
-is(($htmlparse_content[-1][1]),"\'RHSA-2010:0861\',","addDelimiters()-commas in table elements");
-is(($htmlparse_content[-1][-1]),"\'2010-11-10\'","addDelimiters()-commas not in last element of each row");
-
-###############################################################################
 # Test: Check getWebFile() method
 ###############################################################################
 

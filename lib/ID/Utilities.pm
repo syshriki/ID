@@ -15,27 +15,6 @@ sub new {
     return $self;
 }
 
-#Description: Adds delimiters between elements in 2D array inorder to make them easier to eval and send as arguments
-#Example: { arg1 arg2 arg3 } becomes {'arg1,' 'arg2,' 'arg3'} and can be pased to a subroutine sub parse(eval(@arr)); 
-#Arguments: 2D array
-#Returns 2D array with delimiters added to each element
-sub addDelimiters{
-	my $self = shift;
-	my $curr_array = shift;
-	my @new_array = ();
-	my @temp_row = ();
-	my $del_char = ',';
-	foreach my $row(@$curr_array){
-		foreach my $cell(@$row){
-			push(@temp_row,"\'$cell\',");
-		}
-		chop ($temp_row[-1]);		#removes comma at end since there is no element after [-1]
-		push(@new_array,[@temp_row]);
-		@temp_row = ();
-	}
-	return @new_array;
-}
-
 #Description:Determines the correct parser based on the filetype of the given file
 #Arguments: Filename
 #Returns: parsed data in 2D array
