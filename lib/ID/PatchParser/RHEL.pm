@@ -14,7 +14,6 @@ sub createPatchObject {
     my @parsedData = $parse->parseHTMLTable($URL, \@headers);
     my @patchObject = ();
     my $patch;
-	print $parsedData[1][0];
     foreach my $dataRow ( @parsedData ) {
         $patch = new ID::Patch();
             $patch->setSeverity(shift @$dataRow);
