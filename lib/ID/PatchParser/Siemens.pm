@@ -17,7 +17,8 @@ sub createPatchObject {
     foreach my $dataRow ( @parsedData ) {
         $patch = new ID::Patch();
             $patch->setID(shift @$dataRow);
-            $patch->setReferences(shift @$dataRow);
+	    my @references = shift @$dataRow;
+            $patch->setReferences(@references);
             $patch->setDescription(shift @$dataRow);
             $patch->setAffected(shift @$dataRow);
             $patch->setDate(shift @$dataRow);

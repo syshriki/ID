@@ -3,22 +3,19 @@ use warnings;
 use ID::Patch;
 use Test::More tests => 20;
 
-
 can_ok ( "ID::Patch","new" );
 
-my $ID = "98a-7654b-3210c";
-
-my $patch = new ID::Patch (ID => $ID );
-
+my $patch = new ID::Patch ();
 isa_ok ( $patch,  "ID::Patch", "Test that we get an object from the constructor." );
-
-is(new ID::Patch(), undef, "Negative constructor test"); 
 
 my $date = "5/31/2012";
 is ( $patch->getDate(), undef, "Test that getDate() returns undef until date is set." );
 $patch->setDate($date);
 is ( $patch->getDate(), $date, "Test that getDate() and setDate() work" );
 
+my $ID = "98a-7654b-3210c";
+is ( $patch->getID(), undef, "Test that getID() returns undef until ID is set." );
+$patch->setID($ID);
 is ( $patch->getID(), $ID, "Tests getID()" );
 
 my $type = "Security";

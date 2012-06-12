@@ -11,11 +11,6 @@ sub new {
         @_,
         };
     bless ( $self, $class );
-
-    if(! defined $self->getID()){
-	return;
-    }
-
     return $self;
 }
 

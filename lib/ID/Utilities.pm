@@ -86,7 +86,7 @@ sub parseHTMLTable{
     		foreach my $cell(@$row){
         		push(@row_args,$cell);
         	}
-        	push(@table_args,[@row_args]);
+        	push(@table_args, [@row_args]);
         	@row_args = ();
         }
     }
