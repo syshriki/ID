@@ -8,7 +8,7 @@ use base "ID::PatchParser";
 
 sub createPatchObject {
     my $self = shift;
-    my $URL = $self->getUnparsed();
+    my $URL = $self->getFilename();
     my @headers = qw(Severity Advisory Synopsis Date);
     my $parse = new ID::Utilities();
     my @parsedData = $parse->parseHTMLTable($URL, \@headers);
