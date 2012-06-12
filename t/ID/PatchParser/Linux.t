@@ -1,58 +1,41 @@
 use strict;
 use warnings;
-use ID::Patch;
-use ID::PatchParser::Linux;
-use Test::More tests => 12;
 
+use Test::More tests => 9;
 
-can_ok ( "ID::PatchParser::Linux","new" );
+use ID::PatchParser::RHEL;
 
-my $fn = 'lib/ID/PatchParser/Scripts/cfgs/urls.ini';
-my $linux = new ID::PatchParser::Linux(FILENAME => 'lib/ID/PatchParser/Scripts/cfgs/urls.ini');
+can_ok ( "ID::PatchParser::RHEL", "new" );
 
-isa_ok ( $linux, "ID::PatchParser::Linux", "Tests that we get an object from the constructor");
+my $URL = 'http://rhn.redhat.com/errata/rhel-server-6-errata-security.html';
+my $parse = new ID::PatchParser::RHEL ( Unparsed => $URL );
 
-is ( $linux->getFilename(),$fn,"File name accessor test (Inherited)");
+###############################################################################
+# Test: Check that constructor produces object
+###############################################################################
+isa_ok ( $parse, "ID::PatchParser::RHEL", "Test that we get an object from the constructor." );
 
-#This is all data to test that the parser has the correct output
-#
-#################This is what the output of parse should be#####################
-my $text = "\'Critical\',\'RHSA-2010:0861\',\'Critical: firefox security update\',\'2010-11-10\'";
+###############################################################################
+# Test: Check that negative constructor returns undef
+###############################################################################
+is ( new ID::PatchParser::RHEL(), undef, "Test that negative test constructor returns undef in Unparsed is not defined." );
 
-##########This stuff is preperation to put valid data into the parser###########
-open FILE,"<", "t/testFiles/linuxTest.html" or die $!;
-my $lines = undef;
-while(<FILE>){
-	$lines .= $_;
-}
-close(FILE);
-my @args = $linux->Parse($lines);
-my $last_arg = $args[-1];
-chomp $last_arg;
-################################################################################
+###############################################################################
+# Test: Check getUnparsed() method
+###############################################################################
+is ( $parse->getUnparsed(), $URL, "Test getUnparsed() returns URL." );
 
-is ($last_arg,$text,"Parser Test");
-
-$linux->buildPatchList();
-
-my @patch_list = $linux->getPatchList();
-my $last_patch = $patch_list[-1];
-#Last patch in the list should be this RHSA-2010:0861
-is ($last_patch->getID(),'RHSA-2010:0861',"Checks patch list builder and patch list accessor");
-
-
-#Accessor test methods
-is ($linux->createPatch("","RHSA-2010:0861")->getID(), "RHSA-2010:0861", "Test accessor for create Patch (ID)");
-
-is ($linux->createPatch(undef,"ID")->getSeverity(),"N/A", "Negative get test for Create Patch(Severity)");
-
-is ($linux->createPatch("Important","ID")->getSeverity(),"Important", "Test accessor for Create Patch (Severity)");
-
-is ($linux->createPatch("Important","ID")->getDescription(),"N/A", "Negative get test for Create Patch (Description)");
-
-is ($linux->createPatch("","","Synopsis goes here")->getDescription(),"Synopsis goes here", "Test accessor for Create Patch (Description)");
-
-is ($linux->createPatch("Important","ID")->getDate(),"N/A", "Negative get test for Create Patch (Date)");
-
-is ($linux->createPatch("","","","Date here")->getDate(),"Date here", "Test accessor for Create Patch (Date)");
-
+###############################################################################
+# Test: Check createPatchObject() method
+###############################################################################
+my @patchObjects = $parse->createPatchObject();
+    my $date = "2010-11-10";
+    my $ID = "RHSA-2010:0861";
+    my $severity = "Critical";
+    my $type = "Security";
+    my $description = "$severity: firefox security update";
+is ( $patchObjects[-1]->getSeverity(), $severity, "Test that severity object is created." );
+is ( $patchObjects[-1]->getID(), $ID, "Test that ID object is created." );
+is ( $patchObjects[-1]->getDescription(), $description, "Test that description object is created." );
+is ( $patchObjects[-1]->getDate(), $date, "Test that date object is created." );
+is ( $patchObjects[-1]->getType(), $type, "Test that type object is created." );
