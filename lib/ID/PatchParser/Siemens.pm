@@ -2,12 +2,11 @@ package ID::PatchParser::Siemens;
 use strict;
 use warnings;
 use ID::Patch;
-use Spreadsheet::ParseExcel;
-use base 'ID::PatchParser';
+use base "ID::PatchParser";
 
 sub createPatchObject {
     my $self = shift;
-    my $URL = $self->getUnparsed();
+    my $URL = $self->getFilename();
     my $outfile = 'SiemensSecurityPatches.xls';
     my $parse = new ID::Utilities();
     my $fn = $parse->getWebFile( $outfile, $URL );
