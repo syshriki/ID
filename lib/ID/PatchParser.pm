@@ -30,7 +30,8 @@ sub new {
 
 sub getFilename {
     my $self = shift;
-    return $self->{FILENAME};
+    my $filename = $self->{FILENAME};
+    return $filename;
 }
 
 ###############################################################################
