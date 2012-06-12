@@ -118,7 +118,7 @@ sub parseXLSFile {
                 $cellContents =~ s/\s+$//; #Remove trailing whitespace
                 push ( @temp, $cellContents );
             }
-            push ( @parsedData, \@temp ); #Push parsed row array into data array
+            push ( @parsedData, [@temp] ); #Push parsed row array into data array
         }
     }
     return @parsedData;
@@ -138,4 +138,5 @@ sub getWebFile{
         die $response->status_line;
     }
 }
+
 1;
