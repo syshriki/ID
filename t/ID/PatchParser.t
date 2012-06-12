@@ -1,23 +1,26 @@
 use strict;
 use warnings;
-use Test::More tests => 6;
+
+use Test::More tests => 4;
+
 use ID::PatchParser;
 
-can_ok("ID::PatchParser","new");
+can_ok ( "ID::PatchParser", "new" );
 
-my $fn = "File name";
-my $unparsed = "This,is,unparsed,data";
-my $patch_parser = new ID::PatchParser(FILENAME => $fn);
-isa_ok ($patch_parser, "ID::PatchParser" , "make sure we get object from the contructor");
+my $filename = "filename";
+my $parse = new ID::PatchParser ( Filename => $filename );
 
-is ($patch_parser->getFilename(), $fn, "Test getFilename acessor method");
+###############################################################################
+# Test: Check that constructor produces object
+###############################################################################
+isa_ok ( $parse, "ID::PatchParser", "Test that we get an object from the constructor." );
 
-$patch_parser->setUnparsed($unparsed);
-is ($patch_parser->getUnparsed(),$unparsed , "Test Unparsed acessor methods");
+###############################################################################
+# Test: Check that negative constructor returns undef
+###############################################################################
+is ( new ID::PatchParser(), undef, "Test that negative test constructor returns undef if filename is not defined." );
 
-#There must be a scalar in contructor to pass this test
-is (new ID::PatchParser(), undef, "negative test contructor");
-
-#Should return undef right now
-is ($patch_parser->Parse(), undef, "Parse has no function right now");
-
+###############################################################################
+# Test: Check getUnparsed() method
+###############################################################################
+is ( $parse->getFilename(), $filename, "Test getFilename() returns filename." );
