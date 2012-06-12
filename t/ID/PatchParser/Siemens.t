@@ -8,7 +8,7 @@ use ID::PatchParser::Siemens;
 can_ok ( "ID::PatchParser::Siemens", "new" );
 
 my $URL = 'http://support.automation.siemens.com/WW/llisapi.dll/csfetch/18490004/Security_Patches.xls?func=cslib.csFetch&nodeid=47527660';
-my $parse = new ID::PatchParser::Siemens ( Unparsed => $URL );
+my $parse = new ID::PatchParser::Siemens ( Filename => $URL );
 
 ###############################################################################
 # Test: Check that constructor produces object
@@ -18,12 +18,12 @@ isa_ok ( $parse, "ID::PatchParser::Siemens", "Test that we get an object from th
 ###############################################################################
 # Test: Check that negative constructor returns undef
 ###############################################################################
-is ( new ID::PatchParser::Siemens(), undef, "Test that negative test constructor returns undef in Unparsed is not defined." );
+is ( new ID::PatchParser::Siemens(), undef, "Test that negative test constructor returns undef in filename is not defined." );
 
 ###############################################################################
-# Test: Check getUnparsed() method
+# Test: Check getFilename() method
 ###############################################################################
-is ( $parse->getUnparsed(), $URL, "Test getUnparsed() returns URL." );
+is ( $parse->getFilename(), $URL, "Test getFilename() returns URL." );
 
 ###############################################################################
 # Test: Check createPatchObject() method

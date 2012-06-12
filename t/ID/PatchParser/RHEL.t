@@ -8,7 +8,7 @@ use ID::PatchParser::RHEL;
 can_ok ( "ID::PatchParser::RHEL", "new" );
 
 my $URL = 'http://rhn.redhat.com/errata/rhel-server-6-errata-security.html';
-my $parse = new ID::PatchParser::RHEL ( Unparsed => $URL );
+my $parse = new ID::PatchParser::RHEL ( Filename => $URL );
 
 ###############################################################################
 # Test: Check that constructor produces object
@@ -18,12 +18,12 @@ isa_ok ( $parse, "ID::PatchParser::RHEL", "Test that we get an object from the c
 ###############################################################################
 # Test: Check that negative constructor returns undef
 ###############################################################################
-is ( new ID::PatchParser::RHEL(), undef, "Test that negative test constructor returns undef in Unparsed is not defined." );
+is ( new ID::PatchParser::RHEL(), undef, "Test that negative test constructor returns undef in Filename is not defined." );
 
 ###############################################################################
-# Test: Check getUnparsed() method
+# Test: Check getFilename() method
 ###############################################################################
-is ( $parse->getUnparsed(), $URL, "Test getUnparsed() returns URL." );
+is ( $parse->getFilename(), $URL, "Test getFilename() returns URL." );
 
 ###############################################################################
 # Test: Check createPatchObject() method

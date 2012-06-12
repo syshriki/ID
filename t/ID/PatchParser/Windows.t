@@ -8,7 +8,7 @@ can_ok ("ID::PatchParser::Windows", "new");
 
 my $fn = "t/testFiles/patchTest.csv";
 
-my $windows = new ID::PatchParser::Windows(FILENAME => $fn);
+my $windows = new ID::PatchParser::Windows( Filename => $fn );
 
 isa_ok ( $windows, "ID::PatchParser::Windows", "Tests that we get an object from the constructor");
 

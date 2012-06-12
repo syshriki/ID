@@ -1,6 +1,7 @@
 package ID::PatchParser::Siemens;
 use strict;
 use warnings;
+use ID::Utilities;
 use ID::Patch;
 use base "ID::PatchParser";
 

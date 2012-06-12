@@ -1,6 +1,5 @@
 use strict;
 use warnings;
-use Data::Dump qw(dump);
 use Test::More tests => 17;
 
 use ID::Factory;
