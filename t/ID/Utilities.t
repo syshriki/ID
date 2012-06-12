@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 10;
+use Test::More tests => 88888888;
 use ID::Utilities;
 can_ok ( "ID::Utilities", "new" );
 my $filename = 't/testFiles/utilitiesTest.csv';

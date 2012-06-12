@@ -21,7 +21,6 @@ sub new {
 sub parsePatchFile{
 	my $self = shift;
 	my $fn = shift;
-	my $delimit = shift;
 	my $ext = substr((fileparse("$fn", qr/\.[^.]*/))[2],1); #get file extension of file
 	$ext =~ tr/[a-z]/[A-Z]/; 			#makes the file extension into all upper case letters
 	my $parser_sub = ("parse" . $ext . "File");
@@ -99,7 +98,7 @@ sub parseHTMLTable{
 #Returns XLS contents in 2D array
 sub parseXLSFile {
     my $self = shift;
-    my $fn = $self->getFilename();
+    my $fn = shift;
     my @parsedData;
     my $xls = Spreadsheet::ParseExcel->new;
     my $workbook = $xls->parse($fn);
