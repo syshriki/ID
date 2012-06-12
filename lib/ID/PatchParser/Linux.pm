@@ -1,53 +1,29 @@
-package ID::PatchParser::Linux;
+package ID::PatchParser::RHEL;
 use strict;
 use warnings;
-require 'ID/PatchParser/Scripts/getHTML.pl';
-use HTML::TableExtract;
-use base 'ID::PatchParser';
+
 use ID::Patch;
+use ID::Utilities;
+use base "ID::PatchParser";
 
-sub getPatchList{
-        my $self = shift;
-        return @{$self->{patch_list}};
+sub createPatchObject {
+    my $self = shift;
+    my $URL = $self->getFilename();
+    my @headers = qw(Severity Advisory Synopsis Date);
+    my $parse = new ID::Utilities();
+    my @parsedData = $parse->parseHTMLTable($URL, \@headers);
+    my @patchObject = ();
+    my $patch;
+    foreach my $dataRow ( @parsedData ) {
+        $patch = new ID::Patch;
+            $patch->setSeverity(shift @$dataRow);
+            $patch->setID(shift @$dataRow);
+            $patch->setDescription(shift @$dataRow);
+            $patch->setDate(shift @$dataRow);
+            $patch->setType("Security");
+        push ( @patchObject, $patch );
+    }
+    return @patchObject;
 }
 
-sub buildPatchList()
-{
-	my $self = shift;
-	setConfigFile($self->getFilename());
-	my @html_data = &scrape();
-	my @patch_list = ();
-	my @args = ();
-	foreach my $site_code(@html_data){
-		@args = $self->Parse($site_code);
-		foreach my $patch(@args){
-			push(@patch_list,$self->createPatch(eval($patch)));
-		}
-	}
-	@{$self->{patch_list}} = @patch_list;	
-}
-
-sub Parse{
-	my $self = shift;
-	my $html_code = shift;
-        my $te = HTML::TableExtract->new( headers => [qw(Severity Advisory Synopsis Date)] );
-        my @args = ();
-        $te->parse($html_code);
-        foreach my $ts($te->tables) {
-               foreach my $row ($ts->rows) {
-                       push(@args,("\'".join('\',\'',@$row)."\'\n"));
-               }
-        }
-        return @args;
-}
-
-sub createPatch{
-	my $self = shift;
-	my ($severity,$advisory,$synopsis,$date) = @_;
-	my $patch = new ID::Patch(ID => $advisory);
-	$patch->setSeverity($severity);
-	$patch->setDescription($synopsis);
-	$patch->setDate($date);
-	return $patch;
-}
 1;

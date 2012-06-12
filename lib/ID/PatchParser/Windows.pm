@@ -1,12 +1,13 @@
+
 package ID::PatchParser::Windows;
 use strict;
 use warnings;
 use base 'ID::PatchParser';
 use ID::Utilities;
 #Builds the list of Patchs objects 
-#Arguments: None
+#Arguments: Filename
 #Returns: List of Patches
-sub createPatchObject{
+sub createPatchObjects{
         my $self = shift;
 	my $fn = shift;
 
@@ -17,30 +18,30 @@ sub createPatchObject{
 	my @parsedData = $parse->parsePatchFile($fn);
 
 
-	my ($date,$ID,$bulletin_kb,$severity,$impact,$title,$affected_pro,$component_kb,$affectedcom,$imppact2,$severity2,$suspended,$supercedes,$reboot,$cve,$type,$description) = undef;
+	my ($date,$ID,$bulletin_kb,$severity,$impact,$title,$affected_pro,$component_kb,$affected_com,$impact2,$severity2,$suspended,$supercedes,$reboot,$cve,$type,$description) = undef;
 	my @references = ();
 	foreach my $dataRow ( @parsedData ) {
 		$patch = new ID::Patch;
-		$date = shift;
-		$ID = shift;
-		$bulletin_kb = shift;
-		$severity = shift;
-		$impact = shift;
-		$title = shift;
-		$affected_pro = shift;
-		$component_kb = shift;
-		$affected_com = shift;
-		$impact2 = shift;
-		$severity2 = shift;
-		$suspended = shift;
-		$supercedes = shift;
-		$reboot = shift;
-		$cve = shift;
+		$date = shift @$dataRow;
+		$ID = shift @$dataRow;
+		$bulletin_kb = shift @$dataRow;
+		$severity = shift @$dataRow;
+		$impact = shift @$dataRow;
+		$title = shift @$dataRow;
+		$affected_pro = shift @$dataRow;
+		$component_kb = shift @$dataRow;
+		$affected_com = shift @$dataRow;
+		$impact2 = shift @$dataRow;
+		$severity2 = shift @$dataRow;
+		$suspended = shift @$dataRow;
+		$supercedes = shift @$dataRow;
+		$reboot = shift @$dataRow;
+		$cve = shift @$dataRow;
 		$type = "security";	
 	
 		$description = "$severity "." $title for $affected_pro";
 		@references = ("$ID","$bulletin_kb","$component_kb","$cve");
-	
+		$patch->setID($ID);	
 		$patch->setDate($date);
 		$patch->setSeverity($severity);
 		$patch->setTitle($title);
@@ -51,5 +52,6 @@ sub createPatchObject{
 		$patch->setReferences(@references);	
 		push(@patchObjects, $patch);
 	}
+	return @patchObjects;
 }
 1;
