@@ -8,7 +8,7 @@ use base "ID::PatchParser";
 sub createPatchObject {
     my $self = shift;
     my $URL = $self->getFilename();
-    my $outfile = 'SiemensSecurityPatches.xls';
+    my $outfile = "Bulletins/SiemensSecurityPatches.xls";
     my $parse = new ID::Utilities();
     my $fn = $parse->getWebFile( $outfile, $URL );
     my @parsedData = $parse->parsePatchFile($fn);
@@ -17,7 +17,8 @@ sub createPatchObject {
     foreach my $dataRow ( @parsedData ) {
         $patch = new ID::Patch();
             $patch->setID(shift @$dataRow);
-            $patch->setReferences(shift @$dataRow);
+	    my @references = shift @$dataRow;
+            $patch->setReferences(@references);
             $patch->setDescription(shift @$dataRow);
             $patch->setAffected(shift @$dataRow);
             $patch->setDate(shift @$dataRow);

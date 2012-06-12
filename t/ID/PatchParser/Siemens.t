@@ -30,13 +30,13 @@ is ( $parse->getFilename(), $URL, "Test getFilename() returns URL." );
 ###############################################################################
 my @patchObjects = $parse->createPatchObject();
     my $ID = "KB816093";
-    my $references = "";
+    my @references = ( "" );
     my $description = "This update helps resolve a vulnerability in the Microsoft virtual machine. After you install this item, you may have to restart your computer. Once you have installed this item, it cannot be removed.";
     my $affected = "816093: Security Update Microsoft Virtual Machine (Microsoft VM)";
     my $date = "2004-06-08";
     my $type = "Security";
 is ( $patchObjects[-1]->getID(), $ID, "Test that ID object is created." );
-is ( $patchObjects[-1]->getReferences(), $references, "Test that references object is created." );
+is ( $patchObjects[-1]->getReferences()->[0], $references[0], "Test that references object is created." );
 is ( $patchObjects[-1]->getDescription(), $description, "Test that description object is created." );
 is ( $patchObjects[-1]->getAffected(), $affected, "Test that affected object is created." );
 is ( $patchObjects[-1]->getDate(), $date, "Test that date object is created." );
